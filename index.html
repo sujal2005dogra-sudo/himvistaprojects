@@ -259,7 +259,7 @@ Get Free Estimate
 
             <p>📞 +91 9805628137</p>
 
-            <p>✉ himvista.projects@gmail.com</p>
+            <p>✉ <a href="mailto:himvista.projects@gmail.com">himvista.projects@gmail.com</a></p>
 
             <p>🕒 Mon - Sat : 9:00 AM - 6:00 PM</p>
 
@@ -391,7 +391,7 @@ loading="lazy">
 
 <p>📞 +91 9805628137</p>
 
-<p>✉ info@himvistaprojects.com</p>
+<p>✉ <a href="mailto:sujal2005dogra@gmail.com">sujal2005dogra@gmail.com</a></p>
 
 </div>
 
@@ -424,6 +424,9 @@ const SUPABASE_URL = 'https://0ec90b57d6e95fcbda19832f.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJib2x0IiwicmVmIjoiMGVjOTBiNTdkNmU5NWZjYmRhMTk4MzJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4ODE1NzQsImV4cCI6MTc1ODg4MTU3NH0.9I8-U0x86Ak8t2DGaIk0HfvTSLsAyzdnz-Nw00mMkKw';
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+const OWNER_EMAIL = 'sujal2005dogra@gmail.com';
+const FORMSUBMIT_URL = 'https://formsubmit.co/ajax/' + OWNER_EMAIL;
+
 function setStatus(formEl, type, message) {
   let box = formEl.querySelector('.form-status');
   if (!box) {
@@ -433,6 +436,26 @@ function setStatus(formEl, type, message) {
   }
   box.textContent = message;
   box.className = 'form-status ' + type;
+}
+
+async function sendEmail(payload) {
+  const res = await fetch(FORMSUBMIT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({
+      ...payload,
+      _subject: payload._subject || 'New enquiry from HimVista Projects website',
+      _template: 'table'
+    })
+  });
+  if (!res.ok) throw new Error('Email send failed (' + res.status + ')');
+  return res.json();
+}
+
+async function saveToSupabase(row) {
+  try {
+    await supabaseClient.from('inquiries').insert(row);
+  } catch (e) { /* backup store — don't block on it */ }
 }
 
 const contactForm = document.querySelector('#contact .contact-form');
@@ -449,14 +472,18 @@ if (contactForm) {
       return;
     }
     setStatus(contactForm, 'loading', 'Sending your enquiry...');
-    const { error } = await supabaseClient.from('inquiries').insert({
-      name, phone, email: email || null, message: message || null, source: 'contact'
-    });
-    if (error) {
-      setStatus(contactForm, 'error', 'Something went wrong. Please try again or call us.');
-    } else {
-      setStatus(contactForm, 'success', 'Thank you! We received your enquiry and will call you shortly.');
+    const payload = {
+      _subject: 'New contact enquiry from ' + name,
+      Name: name, Phone: phone, Email: email || '(not provided)',
+      Message: message || '(no message)'
+    };
+    try {
+      await sendEmail(payload);
+      await saveToSupabase({ name, phone, email: email || null, message: message || null, source: 'contact' });
+      setStatus(contactForm, 'success', 'Thank you! Your enquiry has been sent. We will call you shortly.');
       contactForm.reset();
+    } catch (err) {
+      setStatus(contactForm, 'error', 'Could not send. Please call us at +91 9805628137.');
     }
   });
 }
@@ -475,15 +502,19 @@ if (quoteForm) {
       return;
     }
     setStatus(quoteForm, 'loading', 'Sending your quote request...');
-    const { error } = await supabaseClient.from('inquiries').insert({
-      name, phone, email: email || null, message: message || null, source: 'quote'
-    });
-    if (error) {
-      setStatus(quoteForm, 'error', 'Something went wrong. Please try again.');
-    } else {
+    const payload = {
+      _subject: 'New quote request from ' + name,
+      Name: name, Phone: phone, Email: email || '(not provided)',
+      Message: message || '(no message)'
+    };
+    try {
+      await sendEmail(payload);
+      await saveToSupabase({ name, phone, email: email || null, message: message || null, source: 'quote' });
       setStatus(quoteForm, 'success', 'Quote request sent! We will contact you soon.');
       quoteForm.reset();
       setTimeout(() => { document.getElementById('quoteModal').style.display = 'none'; }, 2000);
+    } catch (err) {
+      setStatus(quoteForm, 'error', 'Could not send. Please call us at +91 9805628137.');
     }
   });
 }
@@ -500,16 +531,17 @@ if (newsletterSection) {
       return;
     }
     setStatus(newsletterSection, 'loading', 'Subscribing...');
-    const { error } = await supabaseClient.from('subscribers').insert({ email });
-    if (error) {
-      if (error.code === '23505') {
-        setStatus(newsletterSection, 'success', 'You are already subscribed. Thank you!');
-      } else {
-        setStatus(newsletterSection, 'error', 'Something went wrong. Please try again.');
-      }
-    } else {
+    try {
+      await sendEmail({
+        _subject: 'New newsletter subscriber',
+        Email: email,
+        Message: 'A visitor subscribed to the HimVista newsletter.'
+      });
+      try { await supabaseClient.from('subscribers').insert({ email }); } catch (_) {}
       setStatus(newsletterSection, 'success', 'Subscribed! Watch your inbox for updates.');
       nInput.value = '';
+    } catch (err) {
+      setStatus(newsletterSection, 'error', 'Could not subscribe. Please try again.');
     }
   });
 }
