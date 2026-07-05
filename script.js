@@ -25,15 +25,16 @@ nav.style.background="rgba(11,61,145,.25)";
 });
 const modal=document.getElementById("quoteModal");
 
-const btn=document.querySelector(".btn");
+const triggerBtns=document.querySelectorAll(".quote-trigger");
 
 const close=document.querySelector(".close");
 
-btn.onclick=function(){
-
+triggerBtns.forEach(function(btn){
+btn.addEventListener("click",function(e){
+e.preventDefault();
 modal.style.display="block";
-
-}
+});
+});
 
 close.onclick=function(){
 

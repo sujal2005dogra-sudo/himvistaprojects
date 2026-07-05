@@ -53,7 +53,7 @@
 Building premium homes, commercial spaces and interiors across Himachal Pradesh.
 </p>
 
-<a href="#contact" class="btn">
+<a href="#contact" class="btn quote-trigger">
 Get Free Estimate
 </a>
 
@@ -212,29 +212,29 @@ Get Free Estimate
     <div class="project-grid">
 
         <div class="project-card">
-            <img src="images/project1.jpg" alt="Luxury Villa">
+            <img src="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Luxury Villa">
             <div class="project-overlay">
                 <h3>Luxury Villa</h3>
                 <p>Dharamshala, Himachal Pradesh</p>
-                <a href="#">View Project</a>
+                <a href="#contact">View Project</a>
             </div>
         </div>
 
         <div class="project-card">
-            <img src="images/project2.jpg" alt="Modern Home">
+            <img src="https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Modern Home">
             <div class="project-overlay">
                 <h3>Modern Residence</h3>
                 <p>Kangra, Himachal Pradesh</p>
-                <a href="#">View Project</a>
+                <a href="#contact">View Project</a>
             </div>
         </div>
 
         <div class="project-card">
-            <img src="images/project3.jpg" alt="Commercial Building">
+            <img src="https://images.pexels.com/photos/302769/pexels-photo-302769.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Commercial Building">
             <div class="project-overlay">
                 <h3>Commercial Complex</h3>
                 <p>Palampur, Himachal Pradesh</p>
-                <a href="#">View Project</a>
+                <a href="#contact">View Project</a>
             </div>
         </div>
 
@@ -334,7 +334,7 @@ loading="lazy">
 
 <div class="member">
 
-<img src="images/founder.jpg" alt="Founder">
+<img src="https://images.pexels.com/photos/8961065/pexels-photo-8961065.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Founder Sujal Dogra">
 
 <h3>Sujal Dogra</h3>
 
@@ -412,12 +412,107 @@ loading="lazy">
     <img src="images/whatsapp.png" alt="WhatsApp">
 </a>
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 AOS.init({
     duration:1000,
     once:true
 });
+
+const SUPABASE_URL = 'https://0ec90b57d6e95fcbda19832f.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJib2x0IiwicmVmIjoiMGVjOTBiNTdkNmU5NWZjYmRhMTk4MzJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4ODE1NzQsImV4cCI6MTc1ODg4MTU3NH0.9I8-U0x86Ak8t2DGaIk0HfvTSLsAyzdnz-Nw00mMkKw';
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+function setStatus(formEl, type, message) {
+  let box = formEl.querySelector('.form-status');
+  if (!box) {
+    box = document.createElement('div');
+    box.className = 'form-status';
+    formEl.appendChild(box);
+  }
+  box.textContent = message;
+  box.className = 'form-status ' + type;
+}
+
+const contactForm = document.querySelector('#contact .contact-form');
+if (contactForm) {
+  contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = contactForm.querySelector('input[type="text"]').value.trim();
+    const emailInput = contactForm.querySelector('input[type="email"]');
+    const phone = contactForm.querySelector('input[type="tel"]').value.trim();
+    const message = contactForm.querySelector('textarea').value.trim();
+    const email = emailInput ? emailInput.value.trim() : '';
+    if (!name || !phone) {
+      setStatus(contactForm, 'error', 'Please enter your name and phone number.');
+      return;
+    }
+    setStatus(contactForm, 'loading', 'Sending your enquiry...');
+    const { error } = await supabaseClient.from('inquiries').insert({
+      name, phone, email: email || null, message: message || null, source: 'contact'
+    });
+    if (error) {
+      setStatus(contactForm, 'error', 'Something went wrong. Please try again or call us.');
+    } else {
+      setStatus(contactForm, 'success', 'Thank you! We received your enquiry and will call you shortly.');
+      contactForm.reset();
+    }
+  });
+}
+
+const quoteForm = document.querySelector('#quoteModal form');
+if (quoteForm) {
+  quoteForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = quoteForm.querySelector('input[type="text"]').value.trim();
+    const phone = quoteForm.querySelector('input[type="tel"]').value.trim();
+    const emailInput = quoteForm.querySelector('input[type="email"]');
+    const email = emailInput ? emailInput.value.trim() : '';
+    const message = quoteForm.querySelector('textarea').value.trim();
+    if (!name || !phone) {
+      setStatus(quoteForm, 'error', 'Please enter your name and phone number.');
+      return;
+    }
+    setStatus(quoteForm, 'loading', 'Sending your quote request...');
+    const { error } = await supabaseClient.from('inquiries').insert({
+      name, phone, email: email || null, message: message || null, source: 'quote'
+    });
+    if (error) {
+      setStatus(quoteForm, 'error', 'Something went wrong. Please try again.');
+    } else {
+      setStatus(quoteForm, 'success', 'Quote request sent! We will contact you soon.');
+      quoteForm.reset();
+      setTimeout(() => { document.getElementById('quoteModal').style.display = 'none'; }, 2000);
+    }
+  });
+}
+
+const newsletterSection = document.querySelector('.newsletter');
+if (newsletterSection) {
+  const nInput = newsletterSection.querySelector('input[type="email"]');
+  const nBtn = newsletterSection.querySelector('button');
+  nBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const email = nInput.value.trim();
+    if (!email || !email.includes('@')) {
+      setStatus(newsletterSection, 'error', 'Please enter a valid email address.');
+      return;
+    }
+    setStatus(newsletterSection, 'loading', 'Subscribing...');
+    const { error } = await supabaseClient.from('subscribers').insert({ email });
+    if (error) {
+      if (error.code === '23505') {
+        setStatus(newsletterSection, 'success', 'You are already subscribed. Thank you!');
+      } else {
+        setStatus(newsletterSection, 'error', 'Something went wrong. Please try again.');
+      }
+    } else {
+      setStatus(newsletterSection, 'success', 'Subscribed! Watch your inbox for updates.');
+      nInput.value = '';
+    }
+  });
+}
 </script>
 <div id="quoteModal" class="modal">
 
