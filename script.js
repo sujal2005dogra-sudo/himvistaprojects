@@ -51,3 +51,40 @@ modal.style.display="none";
 }
 
 }
+
+// ===== Mobile menu toggle =====
+const menuToggle=document.getElementById("menuToggle");
+const navMenu=document.getElementById("navMenu");
+const navBackdrop=document.getElementById("navBackdrop");
+
+function closeMenu(){
+  navMenu.classList.remove("active");
+  menuToggle.classList.remove("active");
+  navBackdrop.classList.remove("active");
+}
+
+if(menuToggle){
+  menuToggle.addEventListener("click",function(){
+    navMenu.classList.toggle("active");
+    menuToggle.classList.toggle("active");
+    navBackdrop.classList.toggle("active");
+  });
+}
+
+if(navBackdrop){
+  navBackdrop.addEventListener("click",closeMenu);
+}
+
+// Close menu when a nav link is tapped
+if(navMenu){
+  navMenu.querySelectorAll("a").forEach(function(link){
+    link.addEventListener("click",closeMenu);
+  });
+}
+
+// Close menu on resize back to desktop
+window.addEventListener("resize",function(){
+  if(window.innerWidth>768){
+    closeMenu();
+  }
+});

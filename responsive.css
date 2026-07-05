@@ -1,0 +1,403 @@
+/* ===== TABLET & SMALL DESKTOP ===== */
+@media(max-width:1024px){
+  .navbar{
+    padding:15px 5%;
+  }
+  .navbar ul{
+    gap:18px;
+  }
+  .navbar ul li a{
+    font-size:16px;
+    padding:6px 12px;
+  }
+  .overlay h1{
+    font-size:56px;
+  }
+  .overlay p{
+    font-size:20px;
+  }
+  .about{
+    padding:70px 8%;
+  }
+  .about h2,.services h2,.why-us h2,.projects h2,.contact h2,.process h2,.map h2,.team h2{
+    font-size:34px;
+  }
+  .map iframe{
+    height:380px;
+  }
+  .team .member img{
+    width:180px;
+    height:180px;
+  }
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:768px){
+  /* Navbar becomes hamburger */
+  .navbar{
+    flex-direction:row;
+    justify-content:space-between;
+    padding:12px 5%;
+  }
+  .logo img{
+    height:48px;
+  }
+  .navbar ul{
+    position:fixed;
+    top:0;
+    right:-100%;
+    flex-direction:column;
+    justify-content:flex-start;
+    align-items:flex-start;
+    gap:8px;
+    width:75%;
+    max-width:300px;
+    height:100vh;
+    background:#0B3D91;
+    padding:80px 28px 30px;
+    transition:right .35s ease;
+    box-shadow:-5px 0 30px rgba(0,0,0,.3);
+    z-index:1100;
+  }
+  .navbar ul.active{
+    right:0;
+  }
+  .navbar ul li{
+    width:100%;
+  }
+  .navbar ul li a{
+    display:block;
+    font-size:17px;
+    padding:12px 15px;
+    border-radius:8px;
+    width:100%;
+  }
+  .navbar ul li a:hover,
+  .navbar ul li a:active{
+    background:rgba(255,255,255,.15);
+    color:white;
+  }
+
+  /* Hamburger button */
+  .menu-toggle{
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    width:30px;
+    height:22px;
+    cursor:pointer;
+    z-index:1200;
+    background:none;
+    border:none;
+    padding:0;
+  }
+  .menu-toggle span{
+    display:block;
+    width:100%;
+    height:3px;
+    background:white;
+    border-radius:2px;
+    transition:.3s;
+  }
+  .menu-toggle.active span:nth-child(1){
+    transform:translateY(9px) rotate(45deg);
+  }
+  .menu-toggle.active span:nth-child(2){
+    opacity:0;
+  }
+  .menu-toggle.active span:nth-child(3){
+    transform:translateY(-9px) rotate(-45deg);
+  }
+
+  /* Backdrop for menu */
+  .nav-backdrop{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.5);
+    z-index:1050;
+  }
+  .nav-backdrop.active{
+    display:block;
+  }
+
+  /* Hero */
+  .hero{
+    height:90vh;
+  }
+  .overlay{
+    padding:15px;
+  }
+  .overlay h1{
+    font-size:34px;
+    margin-bottom:14px;
+  }
+  .overlay p{
+    font-size:16px;
+    margin-bottom:25px;
+  }
+  .btn{
+    padding:14px 32px;
+    font-size:17px;
+  }
+
+  /* Stats */
+  .stats{
+    flex-direction:column;
+    padding:40px 5%;
+    gap:10px;
+  }
+  .stat{
+    margin:8px;
+  }
+  .stat h2{
+    font-size:40px;
+  }
+  .stat p{
+    font-size:16px;
+  }
+
+  /* About */
+  .about{
+    padding:55px 6%;
+  }
+  .about h2{
+    font-size:28px;
+    margin-bottom:15px;
+  }
+  .about p{
+    font-size:17px;
+  }
+
+  /* Services */
+  .services{
+    padding:55px 6%;
+  }
+  .services h2{
+    font-size:28px;
+    margin-bottom:35px;
+  }
+  .service-container{
+    grid-template-columns:1fr;
+    gap:20px;
+  }
+  .card{
+    padding:28px 22px;
+  }
+  .card h3{
+    font-size:22px;
+  }
+  .card p{
+    font-size:16px;
+  }
+  .icon{
+    font-size:44px;
+  }
+
+  /* Why Us */
+  .why-us{
+    padding:55px 6%;
+  }
+  .why-us h2{
+    font-size:28px;
+    margin-bottom:35px;
+  }
+  .why-container{
+    grid-template-columns:1fr;
+    gap:20px;
+  }
+  .why-card{
+    padding:30px 22px;
+  }
+
+  /* Process */
+  .process{
+    padding:55px 6%;
+  }
+  .process h2{
+    font-size:28px;
+    margin-bottom:35px;
+  }
+  .process-container{
+    grid-template-columns:1fr;
+    gap:20px;
+  }
+  .step{
+    padding:25px;
+  }
+  .step h1{
+    font-size:54px;
+  }
+  .step h3{
+    font-size:22px;
+  }
+
+  /* Projects */
+  .projects{
+    padding:55px 6%;
+  }
+  .projects h2{
+    font-size:28px;
+  }
+  .project-grid{
+    grid-template-columns:1fr;
+    gap:20px;
+  }
+  .project-card img{
+    height:230px;
+  }
+  /* Tap-to-reveal overlay on touch */
+  .project-overlay{
+    opacity:1;
+    background:rgba(11,61,145,.55);
+  }
+  .project-overlay h3{
+    font-size:22px;
+  }
+
+  /* Contact */
+  .contact{
+    padding:55px 6%;
+  }
+  .contact h2{
+    font-size:28px;
+  }
+  .contact>p{
+    font-size:16px;
+    margin-bottom:35px;
+  }
+  .contact-container{
+    grid-template-columns:1fr;
+    gap:30px;
+  }
+  .contact-info{
+    padding:28px 22px;
+  }
+  .contact-info h3{
+    font-size:22px;
+  }
+  .contact-info p{
+    font-size:16px;
+  }
+  .contact-form input,
+  .contact-form textarea{
+    padding:14px;
+    font-size:16px;
+  }
+
+  /* Map */
+  .map{
+    padding:50px 6%;
+  }
+  .map h2{
+    font-size:28px;
+  }
+  .map iframe{
+    height:300px;
+  }
+
+  /* Social */
+  .social{
+    padding:50px 6%;
+  }
+  .social h2{
+    font-size:26px;
+  }
+  .social-links a{
+    display:block;
+    margin:8px auto;
+    max-width:260px;
+    padding:13px 22px;
+  }
+
+  /* Newsletter */
+  .newsletter{
+    padding:55px 6%;
+  }
+  .newsletter h2{
+    font-size:26px;
+  }
+  .newsletter input{
+    width:100%;
+    max-width:none;
+  }
+
+  /* Team */
+  .team{
+    padding:55px 6%;
+  }
+  .team h2{
+    font-size:28px;
+    margin-bottom:30px;
+  }
+  .team .member{
+    max-width:100%;
+  }
+  .team .member img{
+    width:160px;
+    height:160px;
+  }
+
+  /* Footer */
+  footer{
+    padding:50px 6%;
+  }
+  .footer-container{
+    grid-template-columns:1fr;
+    gap:30px;
+    text-align:center;
+  }
+  footer h2{
+    font-size:26px;
+  }
+
+  /* WhatsApp button smaller */
+  .whatsapp{
+    width:54px;
+    height:54px;
+    right:15px;
+    bottom:15px;
+  }
+  .whatsapp img{
+    width:30px;
+    height:30px;
+  }
+
+  /* Modal full-width on mobile */
+  .modal-content{
+    width:92%;
+    margin:15% auto;
+    padding:25px 20px;
+  }
+
+  /* Loader text smaller */
+  #loader h1{
+    font-size:30px;
+  }
+  #loader p{
+    font-size:16px;
+  }
+}
+
+/* ===== VERY SMALL PHONES ===== */
+@media(max-width:380px){
+  .overlay h1{
+    font-size:27px;
+  }
+  .overlay p{
+    font-size:15px;
+  }
+  .btn{
+    padding:13px 26px;
+    font-size:16px;
+  }
+  .about h2,.services h2,.why-us h2,.projects h2,.contact h2,.process h2,.map h2,.team h2{
+    font-size:24px;
+  }
+  .navbar ul{
+    width:85%;
+  }
+  .stat h2{
+    font-size:34px;
+  }
+}
